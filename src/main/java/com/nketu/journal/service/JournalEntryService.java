@@ -1,12 +1,15 @@
 package com.nketu.journal.service;
 
 import com.nketu.journal.entity.JournalEntry;
+import com.nketu.journal.entity.User;
 import com.nketu.journal.repository.JournalEntryRepository;
+import com.nketu.journal.repository.UserRepository;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -19,10 +22,21 @@ public class JournalEntryService {
     @Autowired
     private JournalEntryRepository journalEntryRepository;
 
+    @Autowired
+    private UserService userService;
+
     public void saveEntry(JournalEntry journalEntry){
-        try {
-            journalEntry.setDate(LocalDateTime.now());
             journalEntryRepository.save(journalEntry);
+    }
+
+    @Transactional
+    public void saveEntry(JournalEntry journalEntry, String userName){
+        try {
+            User user = userService.findByUserName(userName);
+            journalEntry.setDate(LocalDateTime.now());
+            JournalEntry saved = journalEntryRepository.save(journalEntry);
+            user.getJournalEntries().add(saved);
+            userService.saveEntry(user);
         }catch (Exception e){
             log.error("exception",e);
         }
@@ -36,7 +50,10 @@ public class JournalEntryService {
         return journalEntryRepository.findById(id);
     }
 
-    public void deleteById(ObjectId id){
+    public void deleteById(ObjectId id, String userName){
+        User user = userService.findByUserName(userName);
+        user.getJournalEntries().removeIf(x->x.getId().equals(id));
+        userService.saveEntry(user);
         journalEntryRepository.deleteById(id);
     }
 
