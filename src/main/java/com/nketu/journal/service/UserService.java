@@ -6,6 +6,8 @@ import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -18,8 +20,11 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    public static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
     public void saveEntry(User user){
         try {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
             userRepository.save(user);
         }catch (Exception e){
             log.error("exception",e);
