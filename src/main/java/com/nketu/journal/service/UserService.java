@@ -10,6 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,6 +26,7 @@ public class UserService {
     public void saveEntry(User user){
         try {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
+            user.setRoles(Arrays.asList("USER"));
             userRepository.save(user);
         }catch (Exception e){
             log.error("exception",e);
@@ -43,8 +45,14 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
+
     public User findByUserName(String userName){
         return userRepository.findByUserName(userName);
+    }
+
+    public void deleteByUserName(String userName){
+        userRepository.deleteByUserName(userName);
+        return;
     }
 
 }
