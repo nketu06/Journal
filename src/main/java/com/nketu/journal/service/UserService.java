@@ -23,13 +23,15 @@ public class UserService {
 
     public static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    public void saveNewUser(User user){
+    public boolean saveNewUser(User user){
         try {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             user.setRoles(Arrays.asList("USER"));
             userRepository.save(user);
+            return true;
         }catch (Exception e){
             log.error("exception",e);
+            return false;
         }
     }
 
@@ -60,9 +62,9 @@ public class UserService {
         return userRepository.findByUserName(userName);
     }
 
-    public void deleteByUserName(String userName){
+    public boolean deleteByUserName(String userName){
         userRepository.deleteByUserName(userName);
-        return;
+        return true;
     }
 
 }
