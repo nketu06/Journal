@@ -1,6 +1,7 @@
 package com.nketu.journal.service;
 
 import com.nketu.journal.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -10,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
-
+@Slf4j
 @Component
 public class UserDetailsServiceImpl implements UserDetailsService {
 
@@ -29,6 +30,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             return userDetails;
         }
 
+        log.error("{} user name not found",username);
         throw new UsernameNotFoundException(username +" user name not found");
     }
 }

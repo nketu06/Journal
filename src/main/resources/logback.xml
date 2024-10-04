@@ -1,0 +1,27 @@
+<configuration>
+    <appender name = "myConsoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <Pattern>
+                %d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n
+            </Pattern>
+        </encoder>
+    </appender>
+
+    <appender name = "myFileAppender" class="ch.qos.logback.core.FileAppender">
+        <encoder>
+            <Pattern>
+                %d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n
+            </Pattern>
+        </encoder>
+        <file>
+            journalApp.log
+        </file>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="myConsoleAppender"/>
+        <appender-ref ref="myFileAppender"/>
+    </root>
+
+
+</configuration>
