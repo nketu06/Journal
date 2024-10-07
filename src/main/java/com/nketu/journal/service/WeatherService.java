@@ -2,17 +2,19 @@ package com.nketu.journal.service;
 
 import com.nketu.journal.api.response.WeatherResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-@Component
+@Service
 public class WeatherService {
 
 //    https://api.weatherstack.com/current?access_key=8047318078042cc24a2c584b91ec81ed&query=Mumbai
 
-    private static final String API_KEY ="8047318078042cc24a2c584b91ec81ed";
+    @Value("${weather.api-key}")
+    private  String API_KEY;
 
     private static final String api = "https://api.weatherstack.com/current?access_key=api_key&query=location";
 

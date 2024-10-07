@@ -7,3 +7,5 @@ spring:
 
   main:
     allow-circular-references: true
+weather:
+  api-key: 8047318078042cc24a2c584b91ec81ed
