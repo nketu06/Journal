@@ -1,6 +1,8 @@
 package com.nketu.journal.service;
 
 import com.nketu.journal.api.response.WeatherResponse;
+import com.nketu.journal.cache.AppCache;
+import com.nketu.journal.constants.Placeholders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
@@ -16,13 +18,14 @@ public class WeatherService {
     @Value("${weather.api-key}")
     private  String API_KEY;
 
-    private static final String api = "https://api.weatherstack.com/current?access_key=api_key&query=location";
-
     @Autowired
     private RestTemplate restTemplate;
 
+    @Autowired
+    private AppCache appCache;
+
     public WeatherResponse getWeather(String city){
-        String finalApi = api.replace("api_key",API_KEY).replace("location",city);
+        String finalApi = appCache.appCacheMap.get(AppCache.keys.WEATHER_API.toString()).replace(Placeholders.API_KEY,API_KEY).replace(Placeholders.LOCATION,city);
         ResponseEntity<WeatherResponse> response = restTemplate.exchange(finalApi, HttpMethod.GET, null, WeatherResponse.class);
         WeatherResponse body = response.getBody();
         return body;
